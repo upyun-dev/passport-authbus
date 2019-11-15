@@ -39,7 +39,9 @@ typically including associated scope, which will be set by Passport at
 control.
 
 ```js
-passport.use(new AuthBusStrategy(
+passport.use(new AuthBusStrategy({
+    authbusEndpoint: 'http://server-name.authbus.com'
+  }，
   function(profile, done) {
     User.findOne({ id: profile.identity }, function (err, user) {
       if (err) { return done(err); }
