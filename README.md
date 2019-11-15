@@ -1,6 +1,6 @@
-# passport-http-bearer
+# passport-authbus
 
-HTTP Bearer authentication strategy for [Passport](http://passportjs.org/).
+[AuthBus](http://authbus.com) authentication strategy for [Passport](http://passportjs.org/).
 
 This module lets you authenticate HTTP requests using bearer tokens, as
 specified by [RFC 6750](http://tools.ietf.org/html/rfc6750), in your Node.js
@@ -25,23 +25,23 @@ integrated into any application or framework that supports
 
 ## Install
 
-    $ npm install passport-http-bearer
+    $ npm install passport-authbus
 
 ## Usage
 
 #### Configure Strategy
 
-The HTTP Bearer authentication strategy authenticates users using a bearer
+The AuthBus authentication strategy authenticates users using a bearer
 token.  The strategy requires a `verify` callback, which accepts that
-credential and calls `done` providing a user.  Optional `info` can be passed,
+user profile and calls `done` providing a user.  Optional `info` can be passed,
 typically including associated scope, which will be set by Passport at
 `req.authInfo` to be used by later middleware for authorization and access
 control.
 
 ```js
-passport.use(new BearerStrategy(
-  function(token, done) {
-    User.findOne({ token: token }, function (err, user) {
+passport.use(new AuthBusStrategy(
+  function(profile, done) {
+    User.findOne({ id: profile.identity }, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
       return done(null, user, { scope: 'all' });
@@ -52,7 +52,7 @@ passport.use(new BearerStrategy(
 
 #### Authenticate Requests
 
-Use `passport.authenticate()`, specifying the `'bearer'` strategy, to
+Use `passport.authenticate()`, specifying the `'authbus'` strategy, to
 authenticate requests.  Requests containing bearer tokens do not require session
 support, so the `session` option can be set to `false`.
 
@@ -61,7 +61,7 @@ application:
 
 ```js
 app.get('/profile', 
-  passport.authenticate('bearer', { session: false }),
+  passport.authenticate('authbus', { session: false }),
   function(req, res) {
     res.json(req.user);
   });
