@@ -43,7 +43,7 @@ passport.use(new AuthBusStrategy({
     authbusEndpoint: 'http://server-name.authbus.com'
   },
   function(profile, done) {
-    User.findOne({ id: profile.identity }, function (err, user) {
+    User.findOne({ authbusUserId: profile.id }, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
       return done(null, user, { scope: 'all' });
